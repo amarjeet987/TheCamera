@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:id="@+id/rellayout_recycle">
+
+
+        <ImageView
+            android:layout_margin="1dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/img_recycle"
+            android:background="#fff"
+            android:padding="0dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:cropToPadding="true"/>
+
+
+
+</RelativeLayout>

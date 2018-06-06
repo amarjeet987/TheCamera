@@ -3,7 +3,7 @@ A simple Camera App using Camera2 Api to capture images and take videos.
 
 
 ## Screenshot:
-<img src="https://user-images.githubusercontent.com/38986305/41055317-8ef2fd94-69de-11e8-8301-fde487003be3.jpg" width="48">
+<img src="https://user-images.githubusercontent.com/38986305/41055317-8ef2fd94-69de-11e8-8301-fde487003be3.jpg" width="480">
 
 
 

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Camera2api</string>
+    <string name="capImg">Capture Images</string>
 </resources>

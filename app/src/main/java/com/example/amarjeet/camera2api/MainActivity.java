@@ -60,6 +60,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -131,8 +132,9 @@ public class MainActivity extends AppCompatActivity {
     private String dir;
     private String imgLoc, vidLoc;
     private Thread mThread;
-    private boolean ImgVisible = false;
+    private boolean ImgVisible = false, VidVisible = false;
     private ImageView mImgView;
+    private RelativeLayout mRelativeLayout;
 
 
     @Override
@@ -145,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
 
         //imageview
         mImgView = (ImageView)findViewById(R.id.img_view);
+
+        //videoView
+        videoView = (VideoView)findViewById(R.id.videoView);
+        mRelativeLayout = (RelativeLayout)findViewById(R.id.rellayout);
 
         //set fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -602,11 +608,81 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
+                if(imgLoc!=null) {
+                    Log.d(TAG, imgLoc);
+                    textureView.animate().alpha(0).setDuration(100);
+                    mImgView.setVisibility(View.VISIBLE);
+                    mImgView.animate().alpha(1.0f).setDuration(1000);
+                    mImgView.setImageBitmap(BitmapFactory.decodeFile(imgLoc));
+                    ImgVisible = true;
+                }
+
+                /**
                 Intent i = new Intent(MainActivity.this, SecActivity.class);
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,null);
                 i.putExtra("ImageUri", imgLoc);
                 startActivity(i, optionsCompat.toBundle());
+                 **/
 
+            }
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && ImgVisible) {
+            Log.d(TAG, "Going back");
+            startPreviewSession();
+            textureView.animate().alpha(1.0f).setDuration(300);
+            mImgView.animate().alpha(0f).setDuration(100);
+            mImgView.setVisibility(View.INVISIBLE);
+            ImgVisible = false;
+            return true;
+        } else if(keyCode == KeyEvent.KEYCODE_BACK && VidVisible) {
+            Log.d(TAG, "Going back");
+            startPreviewSession();
+            textureView.animate().alpha(1.0f).setDuration(300);
+            mRelativeLayout.animate().alpha(0f).setDuration(100);
+            mRelativeLayout.setVisibility(View.INVISIBLE);
+            VidVisible = false;
+            videoView.setVisibility(View.INVISIBLE);
+            return true;
+        } else {
+            Log.d(TAG, "Exiting");
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
+    private void showVideo(String videoUri, final VideoView videoView) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        Log.d(TAG, metrics.heightPixels + "     " + metrics.widthPixels);
+        android.widget.RelativeLayout.LayoutParams params = (android.widget.RelativeLayout.LayoutParams) videoView.getLayoutParams();
+        params.width =  metrics.widthPixels;
+        params.height = metrics.heightPixels;
+        params.leftMargin = 0;
+        videoView.setLayoutParams(params);
+
+        videoView.setVisibility(View.VISIBLE);
+        try {
+            videoView.setMediaController(null);
+            videoView.setVideoURI(Uri.parse(videoUri));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        videoView.requestFocus();
+        //videoView.setZOrderOnTop(true);
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            public void onPrepared(MediaPlayer mp) {
+
+                videoView.start();
+            }
+        });
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoView.start();
             }
         });
     }
@@ -998,10 +1074,13 @@ public class MainActivity extends AppCompatActivity {
     private void stopRecordingVideo() {
         // Stop recording
         mMediaRecorder.reset();
-        Intent i = new Intent(MainActivity.this, SecActivity.class);
-        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,null);
-        i.putExtra("VideoUri", vidLoc);
-        startActivity(i, optionsCompat.toBundle());
+        Log.d(TAG, vidLoc);
+        textureView.animate().alpha(0f).setDuration(100);
+        mRelativeLayout.setVisibility(View.VISIBLE);
+        videoView.setVisibility(View.VISIBLE);
+        mRelativeLayout.animate().alpha(1.0f).setDuration(1000);
+        showVideo(vidLoc,videoView);
         Log.d(TAG, "Inside stop recording");
+        VidVisible = true;
     }
 }

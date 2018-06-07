@@ -22,5 +22,5 @@ A simple Camera App using Camera2 Api to capture images and take videos.
 As clear from the screenshot, it takes images as well as videos, and one can also adjust the brightness of the image while capturing it. It also shows the recently captured images, This app basically shows the least of the things we can do using the magical Camera2 API. Actually, I was trying to make it somewhat like the WhatsApp Camera.
 
 
-## Issues
-I am having some issues with proper optimization of the app, so if anyone is interested it making it somewhat better than what it is right now, maybe add some more adjustable features like contrast, exposure and all, or make it more efficient, or maybe anything else, feel free to leave a pull request.
+## Possible improvements
+If anyone is interested it making it somewhat better than what it is right now, maybe add some more adjustable features like contrast, exposure and all, or make it more efficient, or maybe anything else, feel free to leave a pull request.
